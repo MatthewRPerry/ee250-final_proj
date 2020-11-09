@@ -19,10 +19,12 @@ def on_message(client, userdata, msg):
 
 #low pass filter: moving average(l=5)
 def lowpass(val, arr):
-    l = len(arr)
-    if l > 4:
-        arr.pop(0)
     arr.append(val)
+    l = len(arr)
+    
+    if l > 5:
+        arr.pop(0)
+        l=5
     
     val = 0
     for i in range(l):
