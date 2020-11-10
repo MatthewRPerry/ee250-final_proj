@@ -1,19 +1,40 @@
-"""EE 250L Lab 04 Starter Code
-
-Run rpi_pub_and_sub.py on your Raspberry Pi."""
-
-import paho.mqtt.client as mqtt
 import time
 import sys
+import paho.mqtt.client as mqtt
 
 sys.path.append('../../Software/Python/')
-sys.path.append('../../Software/Python/grove_rgb_lcd')
 import grovepi
 
 def on_connect(client, userdata, flags, rc):
-    print("Connected to server (i.e., broker) with result code "+ str(rc))
+    print("Connected to server (i.e., broker) with result code " + str(rc))
 
-#Default message callback. Please use custom callbacks.
+    #subscribe to fan
+    client.subscribe("perrymat/fan_control")
+    client.message_callback_add("perrymat/fan_control", fan_callback)
+
+    #subscribe to water
+    client.subscribe("perrymat/water_control")
+    client.message_callback_add("perrymat/water_control", water_callback)
+
+#fan callback function
+def fan_callback(client, userdata, message):
+    message = str(message.payload, "utf-8")
+    if message == "FAN_ON":
+        #TODO: set port
+        grovepi.digitalWrite(0,1)
+    elif message == "FAN_OFF":
+        grovepi.digitalWrite(0,0)
+
+#water callback
+def lcd_callback(client, userdata, message):
+    message = str(message.payload, "utf-8")
+    if message = "WATER_ON":
+        #TODO: set port
+        grovepi.digitalWrite(0,1)
+    elif message == "WATER_OFF":
+        grovepi.digitalWrite(0,0)
+
+#Default message callback
 def on_message(client, userdata, msg):
     print("on_message: " + msg.topic + " " + str(msg.payload, "utf-8"))
 
@@ -33,25 +54,23 @@ def lowpass(val, arr):
     return val/l
 
 if __name__ == '__main__':
+
+    #MQTT client/server setup
+    client = mqtt.Client()
+    client.on_message = on_message
+    client.on_connect = on_connect
+    client.connect(host="127.0.0.1", port=3000, keepalive=60)
+    client.loop_start()
     
     sensor_port = 2
     sensor_type = 0
 
-    # #MQTT client/server setup
-    # client = mqtt.Client()
-    # client.on_message = on_message
-    # client.on_connect = on_connect
-    # #TODO: host ip and port
-    # client.connect(host="127.0.0.1", port=3000, keepalive=60)
-    # client.loop_start()
-
     temps = []
     hums = []
 
+
     while True:
-        
         try:
-        
             #read temp/humidity values
             [temp, humidity] = grovepi.dht(sensor_port, sensor_type)
 
@@ -59,10 +78,9 @@ if __name__ == '__main__':
             temp = lowpass(temp, temps)
             humidity = lowpass(humidity, hums)
 
-            #publish values
-            # client.publish("perrymat/temp", temp)
-            # client.publish("perrymat/humidity", humidity)
-            print("temp: " + str(temp) + " hum: " + str(humidity))
+            #publish
+            client.publish("perrymat/temp", temp)
+            client.publish("perrymat/humidity", humidity)
 
             #sleep
             time.sleep(1)
