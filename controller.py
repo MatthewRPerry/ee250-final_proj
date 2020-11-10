@@ -14,13 +14,12 @@ def on_connect(client, userdata, flags, rc):
     client.message_callback_add("perrymat/temp", temp_callback)
 
     #subscribe to humidity data
-    client.subscribe("perrymat/humidiity")
+    client.subscribe("perrymat/humidity")
     client.message_callback_add("perrymat/humidity", hum_callback)
 
 #temp callback function
 def temp_callback(client, userdata, message):
     temp = float(message.payload)
-    print("Temp: "+ str(temp))
     if temp > 24 and fan == False:
         print("TOO HOT! Turn on fan!")
     elif temp < 21 and fan == True:
