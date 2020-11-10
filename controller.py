@@ -23,9 +23,9 @@ def on_connect(client, userdata, flags, rc):
 def temp_callback(client, userdata, message):
     temp = float(message.payload)
     print("Temp: "+ str(temp))
-    if temp > 24 and fan = False:
+    if temp > 24 and fan == False:
         print("TOO HOT! Turn on fan!")
-    elif temp < 21 and fan = True:
+    elif temp < 21 and fan == True:
         print("TOO COLD! Turn off fan!")
     
 
@@ -33,9 +33,9 @@ def temp_callback(client, userdata, message):
 def hum_callback(client, userdata, message):
     hum = float(message.payload)
     print("Humidity: "+ str(hum))
-    if hum > 80 and water = True:
+    if hum > 80 and water == True:
         print("TOO HUMID! Turn off water!")
-    elif temp < 70 and water = False:
+    elif temp < 70 and water == False:
         print("TOO DRY! Turn on water!")
 
 

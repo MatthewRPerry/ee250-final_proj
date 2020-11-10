@@ -26,7 +26,7 @@ def fan_callback(client, userdata, message):
         grovepi.digitalWrite(0,0)
 
 #water callback
-def lcd_callback(client, userdata, message):
+def water_callback(client, userdata, message):
     message = str(message.payload, "utf-8")
     if message == "WATER_ON":
         #TODO: set port
