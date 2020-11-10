@@ -62,7 +62,7 @@ if __name__ == '__main__':
     client = mqtt.Client()
     client.on_message = on_message
     client.on_connect = on_connect
-    client.connect(host="127.0.0.1", port=3000, keepalive=60)
+    client.connect(host="192.168.4.32", port=3000, keepalive=60)
     client.loop_start()
 
     print("Input Commands: WATER_ON, WATER_OFF, FAN_ON, FAN_OFF")
