@@ -17,9 +17,18 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("perrymat/humidity")
     client.message_callback_add("perrymat/humidity", hum_callback)
 
+    #subscribe to fan control
+    client.subscribe("perrymat/fan_control")
+    client.message_callback_add("perrymat/fan_control", fan_callback)
+
+    #subscribe to water control
+    client.subscribe("perrymat/water_control")
+    client.message_callback_add("perrymat/water_control", water_callback)
+
 #temp callback function
 def temp_callback(client, userdata, message):
     temp = float(message.payload)
+    print("Temp: "+ str(temp))
     if temp > 24 and fan == False:
         print("TOO HOT! Turn on fan!")
     elif temp < 21 and fan == True:
@@ -34,6 +43,20 @@ def hum_callback(client, userdata, message):
         print("TOO HUMID! Turn off water!")
     elif hum < 70 and water == False:
         print("TOO DRY! Turn on water!")
+
+def fan_callback(client, userdata, message):
+    control = str(message.payload)
+    if control == "FAN_ON":
+        fan = True
+    elif control == "FAN_OFF":
+        fan = False
+
+def water_callback(client, userdata, message):
+    control = str(message.payload)
+    if control == "WATER_ON":
+        water = True
+    elif control == "WATER_OFF":
+        water = False
 
 
 #Default message callback
