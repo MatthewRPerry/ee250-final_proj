@@ -6,6 +6,7 @@ sys.path.append('../../Software/Python/')
 
 def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code " + str(rc))
+    print()
 
 #Default message callback
 def on_message(client, userdata, msg):
@@ -14,12 +15,16 @@ def on_message(client, userdata, msg):
 #handle user input
 def handle_input(command):
     if command == "WATER_ON":
+        print("pub water on")
         client.publish("perrymat/water_control", "WATER_ON")
     elif command == "WATER_OFF":
+        print("pub water off")
         client.publish("perrymat/water_control", "WATER_OFF")
     elif command == "FAN_ON":
+        print("pub fan on")
         client.publish("perrymat/fan_control", "FAN_ON")
     elif command == "FAN_OFF":
+        print("pub fan off")
         client.publish("perrymat/fan_control", "FAN_OFF")
 
 if __name__ == '__main__':
