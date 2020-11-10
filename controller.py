@@ -3,8 +3,6 @@ import sys
 import paho.mqtt.client as mqtt
 
 sys.path.append('../../Software/Python/')
-import grovepi
-
 fan = False
 water = False
 
