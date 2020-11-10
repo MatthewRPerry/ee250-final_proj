@@ -46,6 +46,7 @@ def hum_callback(client, userdata, message):
 
 def fan_callback(client, userdata, message):
     control = str(message.payload, "utf-8")
+    print(control)
     if control == "FAN_ON":
         fan = True
     elif control == "FAN_OFF":
@@ -53,6 +54,7 @@ def fan_callback(client, userdata, message):
 
 def water_callback(client, userdata, message):
     control = str(message.payload, "utf-8")
+    print(control)
     if control == "WATER_ON":
         water = True
     elif control == "WATER_OFF":
