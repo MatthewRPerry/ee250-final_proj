@@ -32,7 +32,7 @@ def hum_callback(client, userdata, message):
     print("Humidity: "+ str(hum))
     if hum > 80 and water == True:
         print("TOO HUMID! Turn off water!")
-    elif temp < 70 and water == False:
+    elif hum < 70 and water == False:
         print("TOO DRY! Turn on water!")
 
 
