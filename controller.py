@@ -45,14 +45,14 @@ def hum_callback(client, userdata, message):
         print("TOO DRY! Turn on water!")
 
 def fan_callback(client, userdata, message):
-    control = str(message.payload)
+    control = str(message.payload, "utf-8")
     if control == "FAN_ON":
         fan = True
     elif control == "FAN_OFF":
         fan = False
 
 def water_callback(client, userdata, message):
-    control = str(message.payload)
+    control = str(message.payload, "utf-8")
     if control == "WATER_ON":
         water = True
     elif control == "WATER_OFF":
