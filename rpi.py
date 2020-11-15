@@ -1,6 +1,8 @@
 import time
 import sys
 import paho.mqtt.client as mqtt
+from datetime import datetime
+from influxdb import InfluxDBClient
 
 sys.path.append('../../Software/Python/')
 import grovepi
@@ -61,6 +63,10 @@ if __name__ == '__main__':
     client.on_connect = on_connect
     client.connect(host="192.168.4.32", port=3000, keepalive=60)
     client.loop_start()
+
+    #influx server
+    client = InfluxDBClient('192.168.4.32', 3005, 'admin', 'password', 'final')
+    client.create_database('final')
     
     sensor_port = 2
     sensor_type = 0
@@ -78,9 +84,29 @@ if __name__ == '__main__':
             temp = lowpass(temp, temps)
             humidity = lowpass(humidity, hums)
 
+            #load json
+            time = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+            data = [
+                {
+                    "measurement": "temp_humidity",
+                    "tags": {
+                        "host": "server01",
+                        "region": "us-west"
+                    },
+                    "time": time,
+                    "fields": {
+                        "temp": temp,
+                        "humidity": humidity
+                    }
+                }
+            ]
+
+            #send to database
+            client.write_points(data)
+
             #publish
-            client.publish("perrymat/temp", temp)
-            client.publish("perrymat/humidity", humidity)
+            # client.publish("perrymat/temp", temp)
+            # client.publish("perrymat/humidity", humidity)
 
             #sleep
             time.sleep(1)
