@@ -1,7 +1,7 @@
 import time
 import sys
 import paho.mqtt.client as mqtt
-import datetime
+from datetime import datetime
 from influxdb import InfluxDBClient
 
 sys.path.append('../../Software/Python/')
