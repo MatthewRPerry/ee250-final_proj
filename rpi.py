@@ -93,7 +93,7 @@ if __name__ == '__main__':
                         "host": "server01",
                         "region": "us-west"
                     },
-                    "time": time,
+                    "time": dt,
                     "fields": {
                         "temp": temp,
                         "humidity": humidity
