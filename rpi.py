@@ -65,7 +65,7 @@ if __name__ == '__main__':
     client.loop_start()
 
     #influx server
-    client = InfluxDBClient('10.0.', 8086, 'admin', 'password', 'final')
+    client = InfluxDBClient('192.168.4.32', 8086, 'admin', 'password', 'final')
     client.create_database('final')
     
     sensor_port = 2
