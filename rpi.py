@@ -1,7 +1,7 @@
 import time
 import sys
 import paho.mqtt.client as mqtt
-from datetime import datetime
+import datetime
 from influxdb import InfluxDBClient
 
 sys.path.append('../../Software/Python/')
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     client.loop_start()
 
     #influx server
-    client = InfluxDBClient('192.168.4.32', 8086, 'admin', 'password', 'final')
+    client = InfluxDBClient('10.0.', 8086, 'admin', 'password', 'final')
     client.create_database('final')
     
     sensor_port = 2
@@ -85,7 +85,7 @@ if __name__ == '__main__':
             humidity = lowpass(humidity, hums)
 
             #load json
-            time = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+            dt = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
             data = [
                 {
                     "measurement": "temp_humidity",
