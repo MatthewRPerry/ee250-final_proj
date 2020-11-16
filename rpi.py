@@ -22,7 +22,6 @@ def on_connect(client, userdata, flags, rc):
 def fan_callback(client, userdata, message):
     message = str(message.payload, "utf-8")
     if message == "FAN_ON":
-        #TODO: set port
         grovepi.digitalWrite(3,1)
     elif message == "FAN_OFF":
         grovepi.digitalWrite(3,0)
@@ -31,7 +30,6 @@ def fan_callback(client, userdata, message):
 def water_callback(client, userdata, message):
     message = str(message.payload, "utf-8")
     if message == "WATER_ON":
-        #TODO: set port
         grovepi.digitalWrite(4,1)
     elif message == "WATER_OFF":
         grovepi.digitalWrite(4,0)
