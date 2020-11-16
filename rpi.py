@@ -11,12 +11,12 @@ def on_connect(client, userdata, flags, rc):
     print("Connected to server (i.e., broker) with result code " + str(rc))
 
     #subscribe to fan
-    client.subscribe("perrymat/fan_control")
-    client.message_callback_add("perrymat/fan_control", fan_callback)
+    client.subscribe("control/fan")
+    client.message_callback_add("control/fan", fan_callback)
 
     #subscribe to water
-    client.subscribe("perrymat/water_control")
-    client.message_callback_add("perrymat/water_control", water_callback)
+    client.subscribe("control/water")
+    client.message_callback_add("control/water", water_callback)
 
 #fan callback function
 def fan_callback(client, userdata, message):
@@ -56,16 +56,23 @@ def lowpass(val, arr):
     return val/l
 
 if __name__ == '__main__':
+    mqtt_IP = "192.168.4.32"
+    mqtt_port = 3000
+    influx_IP = "192.168.4.32"
+    influx_port = 8086
+
+    influx_user = 'admin'
+    influx_password = 'password'
 
     #MQTT client/server setup
     client = mqtt.Client()
     client.on_message = on_message
     client.on_connect = on_connect
-    client.connect(host="192.168.4.32", port=3000, keepalive=60)
+    client.connect(host=mqtt_IP, port=mqtt_port, keepalive=60)
     client.loop_start()
 
     #influx server
-    client = InfluxDBClient('192.168.4.32', 8086, 'admin', 'password', 'final')
+    client = InfluxDBClient(influx_IP, influx_port, influx_user, influx_password, 'final')
     client.create_database('final')
     
     sensor_port = 2
@@ -103,10 +110,6 @@ if __name__ == '__main__':
 
             #send to database
             client.write_points(data)
-
-            #publish
-            # client.publish("perrymat/temp", temp)
-            # client.publish("perrymat/humidity", humidity)
 
             #sleep
             time.sleep(1)
